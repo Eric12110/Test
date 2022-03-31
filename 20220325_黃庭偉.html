@@ -1,0 +1,175 @@
+<head>
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/1.4.0/jquery.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.0.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href='https://fonts.googleapis.com/css?family=Rock+Salt' rel='stylesheet' type='text/css'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+
+<script>
+    const list = [];
+    var tr;
+    var urlProductById = "http://localhost:62610/api/Product";
+    var urlProduct = "http://localhost:62610/api/Product";
+    window.onload = function () {
+        //getProductById
+        $("#BtnGetById").click(function () {
+            var No = $("#productNo").val();
+            if (No == "")
+                alert("請輸入產品編號")
+            else {
+                urlProductById = urlProductById + "/" + No;
+                $.ajax({
+                    type: 'GET',
+                    url: urlProductById,
+                    dataType: 'json',
+                    success: function (data) {
+                    if(data.SupplierID == null)
+                    {
+                        data.SupplierID = "None";
+                    }
+                    if(data.CompanyName == null ||data.CompanyName == ""){
+                        data.CompanyName = "None";
+                    }
+                    if(data.CategoryID == null){
+                        data.CategoryID = "None";
+                    }
+                        tr = '<td>' + data.ProductID + '</td>' + '<td>' + data.ProductName + '</td>' + '<td>' 
+                            + data.SupplierID + '</td>' + '<td>' + data.CategoryID + '</td>' + '<td>' 
+                                + data.UnitPrice + '</td>' + '<td>' + data.CompanyName + '</td>';
+                        $("#tabletest").append('<tr>' + tr + '</tr>')
+                    }
+                });
+            }
+        });
+        //getAllProducts
+        $("#getProduct").click(function() {
+        $.ajax({
+            type: 'GET',
+            url: urlProduct,
+            dataType: 'json',
+            success: function(data) {
+                for (var i = data.length - 1; i >= 0; i--) //1.為什麼不能用i++的寫法2.為什麼無法取得資料庫自己新增的欄位值3.為什麼用each只能取到6筆資料
+                {         
+                    if(data.CompanyName == null ||data.CompanyName == ""){
+                        data.CompanyName = "None";
+                    }
+                    if(data.CategoryID == null){
+                        data.CategoryID = "None";
+                    }    
+                    var tr;
+                    tr = '<td>' + data[i].ProductID + '</td>' + '<td>' + data[i].ProductName + '</td>' + '<td>' + data[i].SupplierID + '</td>' + '<td>' + data[i].CategoryID + '</td>' +
+                        '<td>' + data[i].UnitPrice + '</td>' + '<td>' + data[i].Supplier.CompanyName + '</td>'
+                    $("#tabletest").append('<tr>' + tr + '</tr>')
+                }
+            }
+        });
+    });
+    }
+</script>
+
+<style>
+    html {
+        font-family: 'helvetica neue', helvetica, arial, sans-serif;
+        font-style: oblique;
+    }
+
+    thead th,
+    tfoot th {
+        font-family: 'Rock Salt', cursive;
+    }
+
+    th {
+        letter-spacing: 2px;
+    }
+
+    td {
+        letter-spacing: 1px;
+    }
+
+    tbody td {
+        text-align: center;
+    }
+
+    #tabletest {
+        text-align: center;
+        align-self: center;
+        border-collapse: collapse;
+        background-color: #debb87;
+    }
+
+    tbody tr:nth-child(odd) {
+        background-color: #FAEBD7;
+    }
+
+    tbody tr:nth-child(even) {
+        background-color: #F0FFFF;
+    }
+
+    #tabletest td,
+    #tabletest th {
+        border: 2px solid #FFE4C4;
+        padding: 8px;
+
+    }
+
+    #tabletest tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+
+    #tabletest tr:hover {
+        background-color: #ddd;
+    }
+
+    @media screen and (max-width: 700px) {
+
+        #tabletest {
+            background-color: rgb(255, 238, 0);
+        }
+
+        #tabletest,
+        #tabletest tr,
+        #tabletest th {
+            width: 100%;
+        }
+    }
+
+    @media screen and (max-width: 500px) {
+        #tabletest {
+            background-color: coral;
+        }
+
+        #tabletest,
+        #tabletest tr,
+        #tabletest th {
+            width: 100%;
+        }
+    }
+</style>
+
+<body>
+    <table id='tabletest' style="width:100%">
+        <thead>
+            <tr>
+                <th>ProductID</th>
+                <th>ProductName</th>
+                <th>SupplierID</th>
+                <th>CategoryID</th>
+                <th>UnitPrice</th>
+                <th>CompanyName</th>
+            </tr>
+        </thead>
+    </table>
+    <p id='showData'></p>
+
+    <p id="getProduct" style="border: #debb87,2px solid;color: #debb87;"> GetAllProducts <i
+            class="fa-solid fa-arrow-right"></i></p>
+    <p id="productdata"></p>
+
+    <input id="productNo" type="text" placeholder="輸入ID" size="22">
+    <p id="BtnGetById" style="border: #debb87,2px solid;color: #debb87;"> getProductById <i
+            class="fa-solid fa-arrow-right"></i></p>
+</body>
