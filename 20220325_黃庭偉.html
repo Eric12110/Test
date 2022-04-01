@@ -70,12 +70,12 @@
         });
         //InsertProducts
         $("#InsertProduct").click(function () {
-            // var ProductID = $("#ProductID").val();
-            // var ProductName = $("#ProductName").val();
-            // var CategoryID = $("#CategoryID").val();
-            // var UnitPrice = $("#UnitPrice").val();
-            // var SupplierID = $("#SupplierID").val();
-            var NewData = {ProductID : 1,ProductName : "Apple123",SupplierID : 1,CategoryID : 2,UnitPrice : 10}
+            var ProductID = $("#ProductID").val();
+            var ProductName = $("#ProductName").val();
+            var CategoryID = $("#CategoryID").val();
+            var UnitPrice = $("#UnitPrice").val();
+            var SupplierID = $("#SupplierID").val();
+            var NewData = { ProductID: ProductID, ProductName: ProductName, SupplierID: SupplierID, CategoryID: CategoryID, UnitPrice: UnitPrice }
             $.ajax({
                 type: 'POST',
                 url: urlProduct,
@@ -83,14 +83,33 @@
                 success: function (data) {
                     console.log("Success!!");
                 },
-                error :function(data){
-                    alert(data.ProductID,data.ProductName);
+                error: function (data) {
+                    console.log("error...")
                 }
 
-        });
+            });
 
-    });
-}
+        });
+        //DeleteProduct
+        $("#DeleteProduct").click(function () {
+            var NoDel = $("#productNoDel").val();
+            var urlDelete = "http://localhost:62610/api/Delete";
+            var urlProductdel = urlDelete + "/" + NoDel;
+            $.ajax({
+                type: 'POST',
+                url: urlProductdel,
+                data: NoDel,
+                success: function (data) {
+                    console.log("Success!!");
+                },
+                error: function (data) {
+                    console.log("error...")
+                }
+
+            });
+
+        });
+    }
 </script>
 
 <style>
@@ -192,10 +211,15 @@
     <input id="productNo" type="text" placeholder="輸入ID" size="22">
     <p id="BtnGetById" style="border: #debb87,2px solid;color: #debb87;"> getProductById <i
             class="fa-solid fa-arrow-right"></i></p>
-    <input id="ProductID">產品編號</input>
-    <input id="ProductName">產品名稱</input>
-    <input id="SupplierID">供應商編號</input>
-    <input id="CategoryID">種類編號</input>
-    <input id="UnitPrice">單位售價</input>
-    <button id="InsertProduct">新增</button>
+    <p>產品編號</p><input id="ProductID"></input>
+    <p>產品名稱</p><input id="ProductName"></input>
+    <p>供應商編號</p><input id="SupplierID"></input>
+    <p>種類編號</p><input id="CategoryID"></input>
+    <p>單位售價</p><input id="UnitPrice"></input>
+    <p id="InsertProduct" style="border: #debb87,2px solid;color: #debb87;"> InsertNewProduct <i
+            class="fa-solid fa-arrow-right"></i></p>
+    <p>刪除產品</p><input id="productNoDel" type="text" placeholder="輸入ProductID" size="22">
+    <p id="DeleteProduct" style="border: #debb87,2px solid;color: #debb87;"> DeleteProduct <i
+        class="fa-solid fa-arrow-right"></i></p>
+
 </body>
