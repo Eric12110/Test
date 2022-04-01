@@ -14,6 +14,7 @@
     var tr;
     var urlProductById = "http://localhost:62610/api/Product";
     var urlProduct = "http://localhost:62610/api/Product";
+    var urlInsertProducts = "http://localhost:62610/api/Products";
     window.onload = function () {
         //getProductById
         $("#BtnGetById").click(function () {
@@ -27,48 +28,69 @@
                     url: urlProductById,
                     dataType: 'json',
                     success: function (data) {
-                    if(data.SupplierID == null)
-                    {
-                        data.SupplierID = "None";
-                    }
-                    if(data.CompanyName == null ||data.CompanyName == ""){
-                        data.CompanyName = "None";
-                    }
-                    if(data.CategoryID == null){
-                        data.CategoryID = "None";
-                    }
-                        tr = '<td>' + data.ProductID + '</td>' + '<td>' + data.ProductName + '</td>' + '<td>' 
-                            + data.SupplierID + '</td>' + '<td>' + data.CategoryID + '</td>' + '<td>' 
-                                + data.UnitPrice + '</td>' + '<td>' + data.CompanyName + '</td>';
+                        if (data.SupplierID == null) {
+                            data.SupplierID = "None";
+                        }
+                        if (data.CompanyName == null || data.CompanyName == "") {
+                            data.CompanyName = "None";
+                        }
+                        if (data.CategoryID == null) {
+                            data.CategoryID = "None";
+                        }
+                        tr = '<td>' + data.ProductID + '</td>' + '<td>' + data.ProductName + '</td>' + '<td>'
+                            + data.SupplierID + '</td>' + '<td>' + data.CategoryID + '</td>' + '<td>'
+                            + data.UnitPrice + '</td>' + '<td>' + data.CompanyName + '</td>';
                         $("#tabletest").append('<tr>' + tr + '</tr>')
                     }
                 });
             }
         });
         //getAllProducts
-        $("#getProduct").click(function() {
-        $.ajax({
-            type: 'GET',
-            url: urlProduct,
-            dataType: 'json',
-            success: function(data) {
-                for (var i = data.length - 1; i >= 0; i--) //1.為什麼不能用i++的寫法2.為什麼無法取得資料庫自己新增的欄位值3.為什麼用each只能取到6筆資料
-                {         
-                    if(data.CompanyName == null ||data.CompanyName == ""){
-                        data.CompanyName = "None";
+        $("#getProduct").click(function () {
+            $.ajax({
+                type: 'GET',
+                url: urlProduct,
+                dataType: 'json',
+                success: function (data) {
+                    for (var i = data.length - 1; i >= 0; i--) //1.為什麼不能用i++的寫法2.為什麼無法取得資料庫自己新增的欄位值3.為什麼用each只能取到6筆資料
+                    {
+                        if (data.CompanyName == null || data.CompanyName == "") {
+                            data.CompanyName = "None";
+                        }
+                        if (data.CategoryID == null) {
+                            data.CategoryID = "None";
+                        }
+                        var tr;
+                        tr = '<td>' + data[i].ProductID + '</td>' + '<td>' + data[i].ProductName + '</td>' + '<td>' + data[i].SupplierID + '</td>' + '<td>' + data[i].CategoryID + '</td>' +
+                            '<td>' + data[i].UnitPrice + '</td>' + '<td>' + data[i].Supplier.CompanyName + '</td>'
+                        $("#tabletest").append('<tr>' + tr + '</tr>')
                     }
-                    if(data.CategoryID == null){
-                        data.CategoryID = "None";
-                    }    
-                    var tr;
-                    tr = '<td>' + data[i].ProductID + '</td>' + '<td>' + data[i].ProductName + '</td>' + '<td>' + data[i].SupplierID + '</td>' + '<td>' + data[i].CategoryID + '</td>' +
-                        '<td>' + data[i].UnitPrice + '</td>' + '<td>' + data[i].Supplier.CompanyName + '</td>'
-                    $("#tabletest").append('<tr>' + tr + '</tr>')
                 }
-            }
+            });
         });
+        //InsertProducts
+        $("#InsertProduct").click(function () {
+            // var ProductID = $("#ProductID").val();
+            // var ProductName = $("#ProductName").val();
+            // var CategoryID = $("#CategoryID").val();
+            // var UnitPrice = $("#UnitPrice").val();
+            // var SupplierID = $("#SupplierID").val();
+            var NewData = {ProductID : 1,ProductName : "Apple123",SupplierID : 1,CategoryID : 2,UnitPrice : 10}
+            $.ajax({
+                type: 'POST',
+                url: urlProduct,
+                data: NewData,
+                success: function (data) {
+                    console.log("Success!!");
+                },
+                error :function(data){
+                    alert(data.ProductID,data.ProductName);
+                }
+
+        });
+
     });
-    }
+}
 </script>
 
 <style>
@@ -164,12 +186,16 @@
         </thead>
     </table>
     <p id='showData'></p>
-
     <p id="getProduct" style="border: #debb87,2px solid;color: #debb87;"> GetAllProducts <i
             class="fa-solid fa-arrow-right"></i></p>
     <p id="productdata"></p>
-
     <input id="productNo" type="text" placeholder="輸入ID" size="22">
     <p id="BtnGetById" style="border: #debb87,2px solid;color: #debb87;"> getProductById <i
             class="fa-solid fa-arrow-right"></i></p>
+    <input id="ProductID">產品編號</input>
+    <input id="ProductName">產品名稱</input>
+    <input id="SupplierID">供應商編號</input>
+    <input id="CategoryID">種類編號</input>
+    <input id="UnitPrice">單位售價</input>
+    <button id="InsertProduct">新增</button>
 </body>
