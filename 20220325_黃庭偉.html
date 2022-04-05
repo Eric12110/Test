@@ -8,7 +8,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
-<!-- test12345 -->
 <script>
     const list = [];
     var tr;
@@ -82,33 +81,17 @@
                 data: NewData,
                 success: function (data) {
                     console.log("Success!!");
+                    alert("新增成功!!")
                 },
                 error: function (data) {
                     console.log("error...")
+                    alert("新增失敗...")
                 }
 
             });
 
         });
-        //DeleteProduct
-        $("#DeleteProduct").click(function () {
-            var NoDel = $("#productNoDel").val();
-            var urlDelete = "http://localhost:62610/api/Delete";
-            var urlProductdel = urlDelete + "/" + NoDel;
-            $.ajax({
-                type: 'POST',
-                url: urlProductdel,
-                data: NoDel,
-                success: function (data) {
-                    console.log("Success!!");
-                },
-                error: function (data) {
-                    console.log("error...")
-                }
 
-            });
-
-        });
     }
 </script>
 
@@ -211,15 +194,12 @@
     <input id="productNo" type="text" placeholder="輸入ID" size="22">
     <p id="BtnGetById" style="border: #debb87,2px solid;color: #debb87;"> getProductById <i
             class="fa-solid fa-arrow-right"></i></p>
-    <p>產品編號</p><input id="ProductID"></input>
-    <p>產品名稱</p><input id="ProductName"></input>
-    <p>供應商編號</p><input id="SupplierID"></input>
-    <p>種類編號</p><input id="CategoryID"></input>
-    <p>單位售價</p><input id="UnitPrice"></input>
+    <p>產品編號</p><input id="ProductID" placeholder="輸入產品編號"></input>
+    <p>產品名稱</p><input id="ProductName" placeholder="輸入產品名稱"></input>
+    <p>供應商編號</p><input id="SupplierID" placeholder="供應商編號"></input>
+    <p>種類編號</p><input id="CategoryID" placeholder="輸入種類編號"></input>
+    <p>單位售價</p><input id="UnitPrice" placeholder="輸入單位售價"></input>
     <p id="InsertProduct" style="border: #debb87,2px solid;color: #debb87;"> InsertNewProduct <i
             class="fa-solid fa-arrow-right"></i></p>
-    <p>刪除產品</p><input id="productNoDel" type="text" placeholder="輸入ProductID" size="22">
-    <p id="DeleteProduct" style="border: #debb87,2px solid;color: #debb87;"> DeleteProduct <i
-        class="fa-solid fa-arrow-right"></i></p>
 
 </body>
